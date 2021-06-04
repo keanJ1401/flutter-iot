@@ -8,7 +8,6 @@ class SensorScreen extends StatelessWidget {
   @override
 
   Widget build(BuildContext context) {
-    initDB();
     return Scaffold(
         backgroundColor: kBgColor,
         body: SensorScreenBody(),

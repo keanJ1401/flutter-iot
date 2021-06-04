@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mqtt_app/MqttClient/components/connection.dart';
 import 'package:mqtt_app/constants.dart';
 import 'package:mqtt_app/SensorScreen/components/custom_card.dart';
@@ -15,7 +16,13 @@ class SensorScreenBody extends StatefulWidget {
 }
 
 class _SensorScreenBody extends State<SensorScreenBody> {
+  Future<List<Sensors>> sensors;
+  String dateFormate = DateFormat("dd-MM-yyyy").format(DateTime.parse(DateTime.now().toString()));
   @override
+  void initState() {
+    sensors = initDB();
+    super.initState();
+  }
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
@@ -84,7 +91,7 @@ class _SensorScreenBody extends State<SensorScreenBody> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "May 16, 2021",
+                      dateFormate,
                       style: TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.w600,
@@ -111,15 +118,29 @@ class _SensorScreenBody extends State<SensorScreenBody> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
-                      Text(
-                        '50',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.grey,
-                        ),
+                      FutureBuilder (
+                          future: sensors,
+                          builder: (context, snapshot) {
+                            return Container (
+                                child: Text (
+                                  snapshot.data[0].value['Temp'].toString(),
+                                  style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey,
+                                ),
+                              )
+                            );
+                          }
                       ),
+                      // Text(
+                      //   '50',
+                      //   style: TextStyle(
+                      //     fontSize: 16,
+                      //     fontWeight: FontWeight.w600,
+                      //     color: Colors.grey,
+                      //   ),
+                      // ),
                       Text(
                         'TEMPERATURE',
                         style: TextStyle(fontSize: 16, color: Colors.grey),

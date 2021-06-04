@@ -11,9 +11,7 @@ import 'package:mqtt_app/posgres_database.dart';
 
 
 
-main()  {
-  runApp(MyApp());
-}
+main() => runApp(MyApp());
 
 
 class MyApp extends StatelessWidget {

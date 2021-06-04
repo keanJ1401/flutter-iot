@@ -14,14 +14,14 @@ Future<List<Sensors>> initDB() async {
     print('Error: $e');
   }
 
-  List<Map<String, Map<String, dynamic>>> resultSensors = await conn.mappedResultsQuery('''
+  List<Map<String, Map<String, dynamic>>> data = await conn.mappedResultsQuery('''
   SELECT sensors.sensor_id, value, time FROM sensors JOIN (
   SELECT sensors.sensor_id, max(time) AS last_order_date FROM sensors GROUP BY sensor_id) AS last_values
   ON sensors.time = last_values.last_order_date
   ORDER BY sensors.sensor_id''');
 
   List<Sensors> sensors =[];
-  for (var row in resultSensors){
+  for (var row in data){
     Map<String, dynamic> each = {};
     row['sensors'].forEach((key, value) {
       each[key.toString()] = value;
@@ -30,6 +30,7 @@ Future<List<Sensors>> initDB() async {
     sensors.add(sensor);
   }
   await conn.close();
+  return sensors;
 }
 
 class Sensors {
